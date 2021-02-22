@@ -77,11 +77,19 @@
                           #(.getMillis period)
                           (fn [fmt] fmt)))))))))))))))
 
+(defn joda-date-time [v]
+  (if (= (type v) java.util.Date) (DateTime. v) v))
+
 (defn interval-diff
-  "e.g. (interval-diff (new DateTime #inst
-                       \"2015-07-20T14:26:34.634599000-00:00\") (t/now)})"
-  [dt-a dt-b prm]
-  (let [period (.toPeriod (t/interval dt-a dt-b))
+  "If needed t-a and t-b are converted to org.joda.time.DateTime
+
+  (interval-diff #inst \"2015-07-20T14:26:34.634599000-00:00\" (t/now)})
+  (interval-diff (new DateTime #inst
+                 \"2015-07-20T14:26:34.634599000-00:00\") (t/now)})"
+  [t-a t-b prm]
+  (let [dt-a (joda-date-time t-a)
+        dt-b (joda-date-time t-b)
+        period (.toPeriod (t/interval dt-a dt-b))
         formatter (-> period
                       (builder prm)
                       .printZeroNever
