@@ -1,6 +1,6 @@
 (def java7? (.startsWith (System/getProperty "java.version") "1.7"))
 
-(defproject clj-time/clj-time "0.15.3-SNAPSHOT"
+(defproject org.clojars.bost/clj-time :lein-v
   :description "A date and time library for Clojure, wrapping Joda Time."
   :url "https://github.com/clj-time/clj-time"
   :mailing-list {:name "clj-time mailing list"
@@ -9,28 +9,37 @@
   :license {:name "MIT License"
             :url "http://www.opensource.org/licenses/mit-license.php"
             :distribution :repo}
-  :dependencies [[joda-time "2.10"]
-                 [org.clojure/clojure "1.10.0" :scope "provided"]]
+
+  ;; can't use the lein-v from ~/.lein/profiles.clj
+  :plugins [[com.roomkey/lein-v "7.2.0"]]
+
+  :deploy-repositories [["clojars" {:url "https://repo.clojars.org"
+                                    :username "bost"
+                                    :password :env/CLOJARS_TOKEN
+                                    :sign-releases false}]]
+
+  :dependencies [[joda-time "2.10.10"]
+                 [org.clojure/clojure "1.10.2" :scope "provided"]]
   :min-lein-version "2.0.0"
   :global-vars {*warn-on-reflection* true}
-  :profiles {:dev {:dependencies [[org.clojure/java.jdbc "0.7.9"]
-                                  [seancorfield/next.jdbc "1.1.588"]]
-                   :plugins [[codox "0.10.6"]]}
-             :midje {:dependencies [[midje "1.9.8"]]
-                     :plugins      [[lein-midje "3.2.1"]
+  :profiles {:dev {:dependencies [[org.clojure/java.jdbc "0.7.12"]
+                                  [seancorfield/next.jdbc "1.1.613"]]
+                   :plugins [[codox "0.10.7"]]}
+             :midje {:dependencies [[midje "1.9.9"]]
+                     :plugins      [[lein-midje "3.2.2"]
                                     [midje-readme "1.0.9"]]
                      :midje-readme {:require "[clj-time.core :as t] [clj-time.predicates :as pr] [clj-time.format :as f] [clj-time.coerce :as c]"}}
-             :1.7    {:dependencies [[org.clojure/clojure "1.7.0"]]}
-             :1.8    {:dependencies [[org.clojure/clojure "1.8.0"]]}
-             :1.9    {:dependencies [[org.clojure/clojure "1.9.0"]
-                                     [org.clojure/test.check "0.10.0-alpha4"]]
+             :1.7    {:dependencies [[org.clojure/clojure "1.10.2"]]}
+             :1.8    {:dependencies [[org.clojure/clojure "1.10.2"]]}
+             :1.9    {:dependencies [[org.clojure/clojure "1.10.2"]
+                                     [org.clojure/test.check "1.1.0"]]
                       :test-paths ["test" "test_spec"]}
-             :1.10   {:dependencies [[org.clojure/clojure "1.10.0"]
-                                     [org.clojure/test.check "0.10.0-alpha4"]]
+             :1.10   {:dependencies [[org.clojure/clojure "1.10.2"]
+                                     [org.clojure/test.check "1.1.0"]]
                       :test-paths ["test" "test_spec"]}
              :master {:repositories [["snapshots" "https://oss.sonatype.org/content/repositories/snapshots/"]]
                       :dependencies [[org.clojure/clojure "1.11.0-master-SNAPSHOT"]
-                                     [org.clojure/test.check "0.10.0-alpha4"]]
+                                     [org.clojure/test.check "1.1.0"]]
                       :test-paths ["test" "test_spec"]}}
 
   :aliases {"test-all" ["with-profile"
